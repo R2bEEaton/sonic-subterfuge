@@ -59,7 +59,7 @@ random_search.fit(X_train, y_train)
 ```
 
 Which found the best parameters of `{'C': 10.781788387508838, 'degree': 3, 'gamma': 0.1, 'kernel': 'rbf'}`.
-This ended up increasing the acfuracy from ~79% to ~80.5%.
+This ended up increasing the accuracy from ~79% to ~80.5%.
 
 ### More Classes
 
@@ -78,12 +78,12 @@ In lieu of learning a kernel for modifying an entire audio file, I needed some c
 way of representing the changes needing to be made to an audio file to make it appear
 like another instrument. I was thinking of using the MFCC since it is commonly used as a
 concise representation of timbre (and is prominently used in our model that we are trying to fool). But there are two problems:
-- It’s not possible to perfectly reconstruct a source audio signal from an MFCC. I
-  need to explore this.
+- It’s not possible to perfectly reconstruct a source audio signal from an MFCC.
 - The model I trained only uses the average of each time bin for
   the MFCC to determine timbre, so any number of changes to the original MFCC
-  will be collapsed into a single number. Another metric for how much it preserves
-  the original audio will be more important than I was hoping
+  will be collapsed into a single number.
+
+MFCC might not be the way to go...
 
 Instead, I could perform gradient descent on the STFT of the audio with regard to the gradient of the input vs. the loss (being some function of the confidence of being the desired class, returned from the model).
 Using the STFT is good because it is [invertible with minimum quality loss](https://en.wikipedia.org/wiki/Short-time_Fourier_transform). However, the model chosen for this project did not seem to be automatically differentiable by tensorflow, and I was therefore not able to compute the gradients. It may be possible though, more on this later.
@@ -91,13 +91,13 @@ Using the STFT is good because it is [invertible with minimum quality loss](http
 So, the next logical step for a black-box-like model where we don't have gradients, is to use a Genetic Algorithm.
 
 Genetic Algorithms are beneficial in this case because without having access at all to an existing model, we can create examples that perform to our desire on that model.
-A population of individuals are randomly mutated and combined according to the scoring function (the model want to fool) and, over time, the theory is that as individuals die off (not good enough for the scoring function), they will be replaced by a dominant population of mutants that accidentally increased the score.
+A population of individuals are randomly mutated and combined according to the scoring function (the model we want to fool) and, over time, the theory is that as individuals die off (not good enough for the scoring function), they will be replaced by a dominant population of mutants that accidentally increased the score.
 
-In short, Genetic algorithms are optimization algorithms inspired by the process of natural selection. They consist of a population of potential solutions, which undergo selection, crossover, and mutation to evolve towards an optimal solution.
+In short, Genetic Algorithms are optimization algorithms inspired by the process of natural selection. They consist of a population of potential solutions, which undergo selection, crossover, and mutation to evolve towards an optimal solution.
 
 ## Genetic Algorithm for Audio
 
-The following outline is a general idea of how a genetic algorithm would work in the audio space.
+The following outline is a general idea of how a genetic algorithm would work in the audio space. This was implemented in [the code](/code/GeneticAlgo.ipynb).
 
 1. Representation of Audio
    - Represent the audio signal as a sequence of values, such as the amplitude over time.
@@ -135,7 +135,7 @@ Repeat the evaluation, selection, crossover, mutation, and replacement steps for
 
 Pursuant to this, the [DEAP Python framework](https://github.com/deap/deap) was used to run the genetic experiment.
 
-> DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas. It seeks to make algorithms explicit and data structures transparent. It works in perfect harmony with parallelisation mechanism such as multiprocessing and SCOOP. The following documentation presents the key concepts and many features to build your own evolutions.
+> DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas. It seeks to make algorithms explicit and data structures transparent. It works in perfect harmony with parallelisation mechanism such as multiprocessing and SCOOP.
 
 Individuals were initialized with the STFT of the given audio signal.
 Mutation was defined as adding to an individual some Gaussian noise scaled to some constant.
@@ -148,9 +148,13 @@ On to the results of this experiment!
 
 ## Examples
 
-| Original Class | Original Audio                                                                        | Desired Class | Perturbed Audio                                          |
-|----------------|---------------------------------------------------------------------------------------|---------------|----------------------------------------------------------|
-| flu            | [008__[flu][nod][cla]0393__1.wav](assets\008__%5Bflu%5D%5Bnod%5D%5Bcla%5D0393__1.wav) | tru           | [out.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) |
+| Original Class | Original Audio                                                            | Desired Class | Perturbed Audio                                          | Probability After Perturbed |
+|----------------|---------------------------------------------------------------------------|---------------|----------------------------------------------------------|-----------------------------|
+| flu 83%        | [008__[flu][nod][cla]0393__1.wav](assets\008__[flu][nod][cla]0393__1.wav) | tru 1%        | [out.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) | tru 14%                     |
+| tru 92%        | [[tru][cla]1954__3.wav](assets\[tru][cla]1954__3.wav)                     | flu 1%        | [out.wav](assets\[tru][cla]1954__3-to-flu.wav)           | flu 25%                     |
+
+![avg_fitness_generation1.png](assets/avg_fitness_generation1.png)
+![avg_fitness_generation2.png](assets/avg_fitness_generation2.png)
 
 ## Summary
 
