@@ -148,13 +148,21 @@ On to the results of this experiment!
 
 ## Examples
 
-| Original Class | Original Audio                                                                | Desired Class | Perturbed Audio                                          | Probability After Perturbed |
-|----------------|-------------------------------------------------------------------------------|---------------|----------------------------------------------------------|-----------------------------|
-| flu 83%        | [008\_\_[flu][nod][cla]0393\_\_1.wav](assets\008__[flu][nod][cla]0393__1.wav) | tru 1%        | [out.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) | tru 14%                     |
-| tru 92%        | [[tru][cla]1954\_\_3.wav](assets\[tru][cla]1954__3.wav)                       | flu 1%        | [out.wav](assets\[tru][cla]1954__3-to-flu.wav)           | flu 25%                     |
+These inputs and desired classes were chosen semi-randomly.
+
+| Original Class | Original Audio                                                                | Desired Class | Perturbed Audio                                                 | Probability After Perturbed |
+|----------------|-------------------------------------------------------------------------------|---------------|-----------------------------------------------------------------|-----------------------------|
+| flu 83%        | [008\_\_[flu][nod][cla]0393\_\_1.wav](assets\008__[flu][nod][cla]0393__1.wav) | tru 1%        | [flu-to-tru.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) | tru 14%                     |
+| tru 92%        | [[tru][cla]1954\_\_3.wav](assets\[tru][cla]1954__3.wav)                       | flu 1%        | [tru-to-flu.wav](assets\[tru][cla]1954__3-to-flu.wav)           | flu 25%                     |
+| cel 97%        | [065\_\_[cel][nod][cla]0059\_\_2.wav](assets\065__[cel][nod][cla]0059__2.wav) | pia 0.3%      | [cel-to-pia.wav](assets\065__[cel][nod][cla]0059__2-to-pia.wav) | pia 35%                     |
+| cel 97%        | ^^                                                                            | gel 0.03%     | [cel-to-gel.wav](assets\065__[cel][nod][cla]0059__2-to-gel.wav) | gel 9%                      |
+| cel 97%        | ^^                                                                            | vio 1.3%      | [cel-to-vio.wav](assets\065__[cel][nod][cla]0059__2-to-vio.wav) | vio 68.5%                   |
 
 ![avg_fitness_generation1.png](assets/avg_fitness_generation1.png)
 ![avg_fitness_generation2.png](assets/avg_fitness_generation2.png)
+![avg_fitness_generation3.png](assets/avg_fitness_generation3.png)
+![avg_fitness_generation4.png](assets/avg_fitness_generation4.png)
+![avg_fitness_generation5.png](assets/avg_fitness_generation5.png)
 
 ## Summary
 
