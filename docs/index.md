@@ -148,6 +148,10 @@ On to the results of this experiment!
 
 ## Examples
 
+| Original Class | Original Audio                                                                        | Desired Class | Perturbed Audio                                          |
+|----------------|---------------------------------------------------------------------------------------|---------------|----------------------------------------------------------|
+| flu            | [008__[flu][nod][cla]0393__1.wav](assets\008__%5Bflu%5D%5Bnod%5D%5Bcla%5D0393__1.wav) | tru           | [out.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) |
+
 ## Summary
 
 ## Why it Failed
