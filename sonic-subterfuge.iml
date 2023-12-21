@@ -8,6 +8,8 @@
       <excludeFolder url="file://$MODULE_DIR$/venv/Scripts" />
       <excludeFolder url="file://$MODULE_DIR$/venv/etc" />
       <excludeFolder url="file://$MODULE_DIR$/venv/share" />
+      <excludeFolder url="file://$MODULE_DIR$/code/dataset" />
+      <excludeFolder url="file://$MODULE_DIR$/code/dataset/IRMAS-TrainingData" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (sonic-subterfuge)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
