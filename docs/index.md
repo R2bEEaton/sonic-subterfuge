@@ -148,10 +148,10 @@ On to the results of this experiment!
 
 ## Examples
 
-| Original Class | Original Audio                                                            | Desired Class | Perturbed Audio                                          | Probability After Perturbed |
-|----------------|---------------------------------------------------------------------------|---------------|----------------------------------------------------------|-----------------------------|
-| flu 83%        | [008__[flu][nod][cla]0393__1.wav](assets\008__[flu][nod][cla]0393__1.wav) | tru 1%        | [out.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) | tru 14%                     |
-| tru 92%        | [[tru][cla]1954__3.wav](assets\[tru][cla]1954__3.wav)                     | flu 1%        | [out.wav](assets\[tru][cla]1954__3-to-flu.wav)           | flu 25%                     |
+| Original Class | Original Audio                                                                | Desired Class | Perturbed Audio                                          | Probability After Perturbed |
+|----------------|-------------------------------------------------------------------------------|---------------|----------------------------------------------------------|-----------------------------|
+| flu 83%        | [008\_\_[flu][nod][cla]0393\_\_1.wav](assets\008__[flu][nod][cla]0393__1.wav) | tru 1%        | [out.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) | tru 14%                     |
+| tru 92%        | [[tru][cla]1954\_\_3.wav](assets\[tru][cla]1954__3.wav)                       | flu 1%        | [out.wav](assets\[tru][cla]1954__3-to-flu.wav)           | flu 25%                     |
 
 ![avg_fitness_generation1.png](assets/avg_fitness_generation1.png)
 ![avg_fitness_generation2.png](assets/avg_fitness_generation2.png)
