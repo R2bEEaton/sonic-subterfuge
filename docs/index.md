@@ -99,40 +99,41 @@ In short, Genetic algorithms are optimization algorithms inspired by the process
 
 The following outline is a general idea of how a genetic algorithm would work in the audio space.
 
-1.  Representation of Audio
-    1. Represent the audio signal as a sequence of values, such as the amplitude over time.
-    1. Each individual in the genetic algorithm population represents a potential adversarial example.
+1. Representation of Audio
+   - Represent the audio signal as a sequence of values, such as the amplitude over time.
+   - Each individual in the genetic algorithm population represents a potential adversarial example.
 
-1. Objective Function (Fitness Function)
-    1. Define a fitness function that quantifies the success of the adversarial attack.
-    1. It should capture the degree to which the modified audio leads to misclassification while ensuring that the perturbations are imperceptible to the human ear.
+2. Objective Function (Fitness Function)
+   - Define a fitness function that quantifies the success of the adversarial attack.
+   - It should capture the degree to which the modified audio leads to misclassification.
+   - Ideally some consideration should be made here to also minimize the perceived difference from the original audio.
 
-1. Initialization
-    1. Generate a population of candidate adversarial examples, starting with the original audio.
-    1. Apply small perturbations to the audio to create diverse individuals.
+3. Initialization
+   - Generate a population of candidate adversarial examples, starting with the original audio.
+   - Apply small perturbations to the audio to create diverse individuals.
 
-1. Evaluation
-    1. Evaluate the fitness of each individual by feeding it into the target model.
-    1. The fitness is determined by how successful the adversarial example is in misguiding the model while maintaining audio quality.
+4. Evaluation
+   - Evaluate the fitness of each individual by feeding it into the target model.
+   - The fitness is determined by how successful the adversarial example is in misguiding the model while maintaining audio quality.
 
-1. Selection
-    1. Select individuals from the population based on their fitness scores.
-    1. Individuals with higher fitness (more successful adversarial examples) have a higher chance of being selected.
+5. Selection
+   - Select individuals from the population based on their fitness scores.
+   - Individuals with higher fitness (more successful adversarial examples) have a higher chance of being selected.
 
-1. Crossover
-    1. Combine pairs of selected individuals to create new candidates.
-    1. This mimics the crossover of genetic material in natural reproduction.
+6. Crossover
+   - Combine pairs of selected individuals to create new candidates.
+   - This mimics the crossover of genetic material in natural reproduction.
 
-1. Mutation
-    1. Introduce random changes to some individuals in the population to maintain diversity.
-    1. Simulate genetic mutation to explore a broader solution space.
+7. Mutation
+   - Introduce random changes to some individuals in the population to maintain diversity.
+   - Simulate genetic mutation to explore a broader solution space.
 
-1. Replacement
-    1. Replace the old population with the new one, which includes the original individuals, selected individuals, and newly generated individuals.
+8. Replacement
+   - Replace the old population with the new one, which includes the original individuals, selected individuals, and newly generated individuals.
 
 Repeat the evaluation, selection, crossover, mutation, and replacement steps for a defined number of generations or until an individual sufficiently maximizes the fitness function (our adversarial example).
 
-Pursuant to this, the DEAP Python framework was used to run the genetic experiment.
+Pursuant to this, the [DEAP Python framework](https://github.com/deap/deap) was used to run the genetic experiment.
 
 > DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas. It seeks to make algorithms explicit and data structures transparent. It works in perfect harmony with parallelisation mechanism such as multiprocessing and SCOOP. The following documentation presents the key concepts and many features to build your own evolutions.
 
@@ -142,6 +143,12 @@ Crossover was defined as averaging two individuals together.
 And finally, the evaluation function used was the trained model's predicted probability of an individual being classified as our desired output class. 
 
 # Results of Genetic Algorithm
+
+On to the results of this experiment!
+
+## Examples
+
+## Summary
 
 ## Why it Failed
 
