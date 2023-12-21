@@ -70,12 +70,83 @@ Below is a confusion matrix for my modified and tuned version of their SVC model
 
 ![confusion_matrix.png](assets/confusion_matrix.png)
 
-# Things tried
+A summary of my updated code is also available [in the code](/code/model/Their-Model-Updated.ipynb), and a trained model itself can be found [here](/code/model/their_tuned_model.pkl). 
+
+# Generating Adversarial Examples
+
+In lieu of learning a kernel for modifying an entire audio file, I needed some concise
+way of representing the changes needing to be made to an audio file to make it appear
+like another instrument. I was thinking of using the MFCC since it is commonly used as a
+concise representation of timbre (and is prominently used in our model that we are trying to fool). But there are two problems:
+- It’s not possible to perfectly reconstruct a source audio signal from an MFCC. I
+  need to explore this.
+- The model I trained only uses the average of each time bin for
+  the MFCC to determine timbre, so any number of changes to the original MFCC
+  will be collapsed into a single number. Another metric for how much it preserves
+  the original audio will be more important than I was hoping
+
+Instead, I could perform gradient descent on the STFT of the audio with regard to the gradient of the input vs. the loss (being some function of the confidence of being the desired class, returned from the model).
+Using the STFT is good because it is [invertible with minimum quality loss](https://en.wikipedia.org/wiki/Short-time_Fourier_transform). However, the model chosen for this project did not seem to be automatically differentiable by tensorflow, and I was therefore not able to compute the gradients. It may be possible though, more on this later.
+
+So, the next logical step for a black-box-like model where we don't have gradients, is to use a Genetic Algorithm.
+
+Genetic Algorithms are beneficial in this case because without having access at all to an existing model, we can create examples that perform to our desire on that model.
+A population of individuals are randomly mutated and combined according to the scoring function (the model want to fool) and, over time, the theory is that as individuals die off (not good enough for the scoring function), they will be replaced by a dominant population of mutants that accidentally increased the score.
+
+In short, Genetic algorithms are optimization algorithms inspired by the process of natural selection. They consist of a population of potential solutions, which undergo selection, crossover, and mutation to evolve towards an optimal solution.
+
+## Genetic Algorithm for Audio
+
+The following outline is a general idea of how a genetic algorithm would work in the audio space.
+
+1.  Representation of Audio
+    1. Represent the audio signal as a sequence of values, such as the amplitude over time.
+    1. Each individual in the genetic algorithm population represents a potential adversarial example.
+
+1. Objective Function (Fitness Function)
+    1. Define a fitness function that quantifies the success of the adversarial attack.
+    1. It should capture the degree to which the modified audio leads to misclassification while ensuring that the perturbations are imperceptible to the human ear.
+
+1. Initialization
+    1. Generate a population of candidate adversarial examples, starting with the original audio.
+    1. Apply small perturbations to the audio to create diverse individuals.
+
+1. Evaluation
+    1. Evaluate the fitness of each individual by feeding it into the target model.
+    1. The fitness is determined by how successful the adversarial example is in misguiding the model while maintaining audio quality.
+
+1. Selection
+    1. Select individuals from the population based on their fitness scores.
+    1. Individuals with higher fitness (more successful adversarial examples) have a higher chance of being selected.
+
+1. Crossover
+    1. Combine pairs of selected individuals to create new candidates.
+    1. This mimics the crossover of genetic material in natural reproduction.
+
+1. Mutation
+    1. Introduce random changes to some individuals in the population to maintain diversity.
+    1. Simulate genetic mutation to explore a broader solution space.
+
+1. Replacement
+    1. Replace the old population with the new one, which includes the original individuals, selected individuals, and newly generated individuals.
+
+Repeat the evaluation, selection, crossover, mutation, and replacement steps for a defined number of generations or until an individual sufficiently maximizes the fitness function (our adversarial example).
+
+Pursuant to this, the DEAP Python framework was used to run the genetic experiment.
+
+> DEAP is a novel evolutionary computation framework for rapid prototyping and testing of ideas. It seeks to make algorithms explicit and data structures transparent. It works in perfect harmony with parallelisation mechanism such as multiprocessing and SCOOP. The following documentation presents the key concepts and many features to build your own evolutions.
+
+Individuals were initialized with the STFT of the given audio signal.
+Mutation was defined as adding to an individual some Gaussian noise scaled to some constant.
+Crossover was defined as averaging two individuals together.
+And finally, the evaluation function used was the trained model's predicted probability of an individual being classified as our desired output class. 
 
 # Results of Genetic Algorithm
 
-## Why it failed - other things to try
+## Why it Failed
+
+## Literature Review
 
 # Joining the Good Side
 
-Lessons learned
+# Lessons learned
