@@ -150,26 +150,77 @@ On to the results of this experiment!
 
 These inputs and desired classes were chosen semi-randomly.
 
-| Original Class | Original Audio                                                                | Desired Class | Perturbed Audio                                                 | Probability After Perturbed |
-|----------------|-------------------------------------------------------------------------------|---------------|-----------------------------------------------------------------|-----------------------------|
-| flu 83%        | [008\_\_[flu][nod][cla]0393\_\_1.wav](assets\008__[flu][nod][cla]0393__1.wav) | tru 1%        | [flu-to-tru.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) | tru 14%                     |
-| tru 92%        | [[tru][cla]1954\_\_3.wav](assets\[tru][cla]1954__3.wav)                       | flu 1%        | [tru-to-flu.wav](assets\[tru][cla]1954__3-to-flu.wav)           | flu 25%                     |
-| cel 97%        | [065\_\_[cel][nod][cla]0059\_\_2.wav](assets\065__[cel][nod][cla]0059__2.wav) | pia 0.3%      | [cel-to-pia.wav](assets\065__[cel][nod][cla]0059__2-to-pia.wav) | pia 35%                     |
-| cel 97%        | ^^                                                                            | gel 0.03%     | [cel-to-gel.wav](assets\065__[cel][nod][cla]0059__2-to-gel.wav) | gel 9%                      |
-| cel 97%        | ^^                                                                            | vio 1.3%      | [cel-to-vio.wav](assets\065__[cel][nod][cla]0059__2-to-vio.wav) | vio 68.5%                   |
+| # | Original Class | Original Audio                                                                | Desired Class | Perturbed Audio                                                 | Probability After Perturbed |
+|-----------|----------------|-------------------------------------------------------------------------------|---------------|-----------------------------------------------------------------|-----------------------------|
+| 1         | flu 83%        | [008\_\_[flu][nod][cla]0393\_\_1.wav](assets\008__[flu][nod][cla]0393__1.wav) | tru 1%        | [flu-to-tru.wav](assets\008__[flu][nod][cla]0393__1-to-tru.wav) | tru 14%                     |
+| 2         | tru 92%        | [[tru][cla]1954\_\_3.wav](assets\[tru][cla]1954__3.wav)                       | flu 1%        | [tru-to-flu.wav](assets\[tru][cla]1954__3-to-flu.wav)           | flu 25%                     |
+| 3         | cel 97%        | [065\_\_[cel][nod][cla]0059\_\_2.wav](assets\065__[cel][nod][cla]0059__2.wav) | pia 0.3%      | [cel-to-pia.wav](assets\065__[cel][nod][cla]0059__2-to-pia.wav) | pia 35%                     |
+| 4         | cel 97%        | ^^                                                                            | gel 0.03%     | [cel-to-gel.wav](assets\065__[cel][nod][cla]0059__2-to-gel.wav) | gel 9%                      |
+| 5         | cel 97%        | ^^                                                                            | vio 1.3%      | [cel-to-vio.wav](assets\065__[cel][nod][cla]0059__2-to-vio.wav) | vio 68.5%                   |
+| 6         | voi 28%        | [[voi][pop_roc]2353\_\_3.wav](assets\[voi][pop_roc]2353__3.wav)               | cel 0.2%      | [voi-to-cel.wav](assets\[voi][pop_roc]2353__3-to-cel.wav)       | cel 1.3%                    |
+| 7         | voi 28%        | ^^ Trying to make it more like itself                                         | voi 28%       | [voi-to-voi.wav](assets\[voi][pop_roc]2353__3-to-voi.wav)       | voi 88.5%                   |
 
-![avg_fitness_generation1.png](assets/avg_fitness_generation1.png)
+Example #2
 ![avg_fitness_generation2.png](assets/avg_fitness_generation2.png)
+
+Example #3
 ![avg_fitness_generation3.png](assets/avg_fitness_generation3.png)
+
+Example #4
 ![avg_fitness_generation4.png](assets/avg_fitness_generation4.png)
+
+Example #5
 ![avg_fitness_generation5.png](assets/avg_fitness_generation5.png)
+
+Example #7
+![avg_fitness_generation7.png](assets/avg_fitness_generation7.png)
 
 ## Summary
 
-## Why it Failed
+Over all, the experiment's results were very interesting. I was unable to meet my initial goal of making the audio changes imperceptible to humans.
+There is admittedly a lot of noise added into the original audio, but the original audio is undoubtedly still recognizable to humans.
 
-## Literature Review
+Additionally, it seemed that the genetic algorithm was only able to push the model into a direction that the model was already confused about. Similar classes made it easier to confuse the model. For example, `trumpet to flute` were easy to trick, but `cello to electric guitar`, or `voice to cello` were hard.
 
-# Joining the Good Side
+An interesting example I tried was picking a `voice` class audio signal and trying to make it *more*... `voice`.
+The sample's predicted probability of being `voice` was quite low, 28%. Running the genetic algorithm on this audio with the goal of making it as `voice` as possible, a predicted probability of 88.5% for being `voice` was achieved with the perturbed audio. It was very easy for the genetic algorithm to find a local maximum for the audio sample which was already on its way to being the best `voice` it could be.
 
-# Lessons learned
+### Local Maxima
+
+Local maxima are huge problems for genetic algorithms. In the presence of local maxima, the algorithm may experience stagnation, where the population converges to a homogeneous set of similar solutions. This lack of diversity hampers the ability of the genetic algorithm to explore alternative solutions and can lead to premature convergence.
+
+Due to the size of the individual, and perhaps the naïveté of mutation, it seems the algorithm would often get stuck at suboptimal solutions, plateauing no matter how long I waited.
+
+### Is the algorithm actually doing anything?
+
+When I originally saw these results, I assumed that the genetic algorithm wasn't doing anything. I figured it was probably just adding noise randomly and shifting all probabilities closer and closer to a random weighted distribution of probabilities latent from training, or something like that.
+
+But repeated tests indicated that the genetic algorithm would consistently at least nudge audio in the direction of choice, rather than in all directions. Sometimes a similar class would also be affected, but I am fairly confident that it is actually doing something.
+Of course, it still seemed to settle on local maxima.
+
+## Relevant Papers
+
+While working on this project, I consulted research papers, several of which I would like to highlight below.
+
+* [Practical Black-Box Attacks against Machine Learning](https://arxiv.org/pdf/1602.02697.pdf)
+
+  This paper proposes a way to generate adversarial examples for a model without having access to the model or knowing anything about it. This was achieved in the paper by training a model of their own and finding that adversarial examples generated for it did well against the black-box model. This could be achieved as well in the audio space, and potentially allow FGSM to be executed on the input audio for better adversarial results.
+
+* [Adversarial Attack Using Genetic Algorithm](https://medium.com/analytics-vidhya/adversarial-attack-using-genetic-algorithm-90beba13b6cb)
+  ![4-to-2.gif](assets\4-to-2.gif)
+
+   This medium article by Pavel Tyshevskyi provides a nice introduction to how genetic algorithms can be used to produce adversarial examples for an existing classification model.
+
+* [Audio Adversarial Examples: Targeted Attacks on Speech-to-Text](https://arxiv.org/abs/1801.01944)
+
+   This paper represents my lofty goals when starting this paper. They found a way to differentiate through the entire audio classification system (in this case Mozilla's DeepSpeech) and run gradient descent on input audio to achieve adversarial results 100% of the time, indistinguishable to human listeners.
+   What they did is incredible!
+
+# Joining the Light Side
+
+We're not done yet! Instead of attacking, let's help now!
+
+Noise is often an issue for classification models which use carefully curated inputs. The samples in the IRMAS dataset are quite nice, recorded in 16-bit sterio wav format, sampled at 44.1kHz. The examples generated by the genetic algorithm sound like audio recorded on a bad microphone, like those typically present in laptops even today. If a bad recording is enough to decrease classification confidence, then the model was just asking to be fooled.
+
+Let's try improving it by generating some noisy audio and supplementing it into the training set.
+
