@@ -13,6 +13,8 @@ https://github.com/vntkumar8/musical-instrument-classification
 
 ## Hyperparameter tuning
 
+![confusion_matrix.png](assets/confusion_matrix.png)
+
 # Things tried
 
 # Results of Genetic Algorithm
