@@ -249,7 +249,7 @@ This seems to have produced the same or worse results. Training with noise made 
 
 ## Filter Noise
 
-Instead of embracing noise, let's try to cut it out. When training, we can try removing noise from the IRMAS set, and then do the same when evaluating.
+Instead of embracing noise, let's try to cut it out. When training, we can try removing noise from the IRMAS set, and then do the same when evaluating. This produces an accuracy of 61.1%.
 
 | New Actual Confidence (higher is better) | Old Perturbed Probability | New Perturbed Probability (lower than Old is better) |
 |------------------------------------------|---------------------------|------------------------------------------------------|
